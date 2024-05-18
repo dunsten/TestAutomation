@@ -15,8 +15,7 @@ class CameraMock:
         
         # Generate an image with random noise
         image_data = (np.abs(np.random.randn(100,100))*noise_level)
-        print(image_data)
-        
+
         # Possibly introduce a defect
         if with_defect:
             x, y = random.randint(10, 90), random.randint(10, 90)
@@ -25,6 +24,9 @@ class CameraMock:
         # Ensure values stay within valid pixel range
         image_data = np.clip(image_data, 0, 255).astype(np.uint8)
         image = Image.fromarray(image_data)
+        
+        # Print the image
+        print("Generated Image:")
+        image.show()  # This will open the image in the default image viewer
+        from camera import CameraMock
         return image
-
-
