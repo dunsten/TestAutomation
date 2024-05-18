@@ -1,5 +1,6 @@
 # integrate_system.py
 import time
+import random
 from ai import AISystemMock
 from camera import CameraMock
 from database import Database
@@ -11,7 +12,12 @@ class IntegrationSystem:
         self.database = Database(db_name)
         self.image_id = 0
 
-    def capture_and_analyze(self, with_defect=True, low_lighting=False):
+    def capture_and_analyze(self):
+        
+        # Randomize 'with defect', 'without defect', and 'low lighting' conditions
+        with_defect = random.choice([True, False])
+        low_lighting = random.choice([True, False])
+        
         # Capture an image
         image = self.camera.capture(with_defect=with_defect, low_lighting=low_lighting)
 

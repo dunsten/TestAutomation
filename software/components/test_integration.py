@@ -7,6 +7,7 @@ from camera import CameraMock
 from database import Database
 from integrate_system import IntegrationSystem
 import sqlite3
+from PIL import Image
 
 class TestIntegrationSystem(unittest.TestCase):
     def setUp(self):

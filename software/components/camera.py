@@ -28,5 +28,5 @@ class CameraMock:
         # Print the image
         print("Generated Image:")
         image.show()  # This will open the image in the default image viewer
-        from camera import CameraMock
+
         return image
