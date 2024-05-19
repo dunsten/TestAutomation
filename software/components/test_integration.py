@@ -1,5 +1,4 @@
 # test_integration.py
-
 import unittest
 import os
 from ai import AISystemMock
@@ -23,7 +22,9 @@ class TestIntegrationSystem(unittest.TestCase):
         # Capture and analyze with a defect and without a defect
         self.integration_system.capture_and_analyze(with_defect=True)
         self.integration_system.capture_and_analyze(with_defect=False)
-        
+        self.integration_system.capture_and_analyze(with_defect=True, low_lighting=True)
+        self.integration_system.capture_and_analyze(with_defect=False, low_lighting=True)
+
         # Reopen the connection for verification
         conn = sqlite3.connect(self.db_name)
         cursor = conn.cursor()
@@ -32,9 +33,11 @@ class TestIntegrationSystem(unittest.TestCase):
         conn.close()
         
          # Assertions to check the logging results
-        self.assertEqual(len(rows), 2)
+        self.assertEqual(len(rows), 4)
         self.assertEqual(int.from_bytes(rows[0][2], "little"), 1)  # Defect present
         self.assertEqual(int.from_bytes(rows[1][2], "little"), 0)  # No defect
+        self.assertEqual(int.from_bytes(rows[2][2], "little"), 1)  # Defect present with Low Lightning
+        self.assertEqual(int.from_bytes(rows[3][2], "little"), 0)  # No defect present with Low Lightning
 
     def test_defect_detection(self):
         # Test with defect

@@ -7,16 +7,16 @@ from database import Database
 
 class IntegrationSystem:
     def __init__(self, threshold=145, db_name='test_results.db'):
-        self.ai_system = AISystemMock(threshold)
+        self.ai_system = AISystemMock()
         self.camera = CameraMock()
         self.database = Database(db_name)
         self.image_id = 0
 
-    def capture_and_analyze(self):
+    def capture_and_analyze(self, with_defect=True, low_lighting=True):
         
         # Randomize 'with defect', 'without defect', and 'low lighting' conditions
-        with_defect = random.choice([True, False])
-        low_lighting = random.choice([True, False])
+        #with_defect = random.choice([True, False])
+        #low_lighting = random.choice([True, False])
         
         # Capture an image
         image = self.camera.capture(with_defect=with_defect, low_lighting=low_lighting)
