@@ -90,11 +90,11 @@ class MockDAQDevice:
                 next_toggle_time += interval
             time.sleep(tolerance)  # Check in small intervals for more accurate toggling
 
-    def set_failure_pin(self, pin, value):
+    def set_failure_pin(self, channel, value):
         """
         Set the failure indicator pin.
         Args:
-            pin (str): The name of the pin.
+            channel (str): The name of the pin.
             value (bool): The value to set (True or False).
         """
-        self.write_digital(pin, value)
+        self.write_digital(channel, value)
