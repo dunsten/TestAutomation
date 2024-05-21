@@ -43,7 +43,7 @@ def main():
         plt.draw()
         plt.pause(0.01)  # Pause to update the plot
 
-    # Stop toggling the pin
+    #Stop toggling the pin
     daq_device.stop_toggle()
 
     # Show the final plot
