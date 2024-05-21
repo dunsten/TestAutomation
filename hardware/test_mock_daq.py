@@ -11,6 +11,15 @@ class TestMockDAQDevice(unittest.TestCase):
         self.daq_device.configure_digital_channel('pin1', 'input')
         self.daq_device.configure_digital_channel('pin2', 'output')
         print("\nSetup complete: Configured 'pin1' as input and 'pin2' as output.")
+        self.threads = []
+
+    def tearDown(self):
+        # Ensure any ongoing toggling is stopped and all threads are joined
+        self.daq_device.stop_toggle()
+        for thread in self.threads:
+            if thread.is_alive():
+                thread.join()
+        print("TearDown complete: Stopped any ongoing toggling and joined all threads.")
 
     def test_initial_state(self):
         """Test initial state of the pins."""
@@ -35,6 +44,8 @@ class TestMockDAQDevice(unittest.TestCase):
         """Test that pin1 toggles every second and pin2 is the opposite of pin1."""
         print("Starting toggle test for pin1 and pin2 with 1-second interval...")
         self.daq_device.start_toggle('pin1', 'pin2', 1.0, tolerance=0.01)
+        self.addCleanup(self.daq_device.stop_toggle)  # Ensure toggling stops even if the test fails
+
         time.sleep(2.1)  # Wait for a little more than 2 seconds to observe two toggles
 
         # Check the state after the first toggle
@@ -65,6 +76,7 @@ class TestMockDAQDevice(unittest.TestCase):
         print("Starting timing mechanism test with 1-second interval and 0.01-second tolerance...")
         self.daq_device.start_toggle('pin1', 'pin2', 1.0, tolerance=0.01)
         start_time = time.time()
+        self.addCleanup(self.daq_device.stop_toggle)  # Ensure toggling stops even if the test fails
         time.sleep(2.1)  # Wait for a little more than 2 seconds to observe two toggles
         end_time = time.time()
 
@@ -112,6 +124,7 @@ class TestMockDAQDevice(unittest.TestCase):
             target=mock_external_signal_generator, 
             args=(self.daq_device, 'pin1')
         )
+        self.threads.append(external_signal_thread)
         external_signal_thread.start()
         time.sleep(6)  # Wait enough time to observe multiple toggles
 
@@ -139,6 +152,7 @@ class TestMockDAQDevice(unittest.TestCase):
             target=mock_external_signal_generator, 
             args=(self.daq_device, 'pin2')
         )
+        self.threads.append(external_signal_thread)
         external_signal_thread.start()
         time.sleep(6)  # Wait enough time to observe multiple toggles
 
