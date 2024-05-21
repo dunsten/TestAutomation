@@ -8,6 +8,7 @@ on:
     branches:
       - main
 
+
 jobs:
   test:
     name: Run Tests
@@ -29,4 +30,4 @@ jobs:
 
     - name: Run Tests
       run: |
-        python Test_mock_daq.py
+        python hardware/test_mock_daq.py
