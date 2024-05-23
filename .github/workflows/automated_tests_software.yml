@@ -1,4 +1,4 @@
-name: Automated Tests
+name: Automated Tests Software
 
 on:
   push:
@@ -30,4 +30,4 @@ jobs:
 
     - name: Run Tests
       run: |
-        python hardware/test_mock_daq.py
+        python software/components/test_integration.py

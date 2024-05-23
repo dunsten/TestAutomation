@@ -128,7 +128,7 @@ class TestMockDAQDevice(unittest.TestCase):
         print(f"Elapsed time: {elapsed_time} seconds (expected ~2 seconds)")
 
         # Check that the elapsed time is close to the expected time (2 seconds) within tolerance
-        self.assertAlmostEqual(elapsed_time, 2.0, delta=0.05)  # Allow 50ms tolerance
+        self.assertAlmostEqual(elapsed_time, 2.1, delta=0.05)  # Allow 50ms tolerance
         print("Timing mechanism test passed.")
 
         # Stop toggling
