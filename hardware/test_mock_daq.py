@@ -1,7 +1,6 @@
 import unittest
 import time
 from mock_daq import MockDAQDevice
-from unittest.mock import MagicMock
 import threading
 
 class TestMockDAQDevice(unittest.TestCase):
