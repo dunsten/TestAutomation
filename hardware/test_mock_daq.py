@@ -14,18 +14,21 @@ class TestMockDAQDevice(unittest.TestCase):
         self.pin_statuses = []  # List to track pin statuses
         print("\nSetup complete: Configured 'pin1' as input, 'pin2' as output, and 'failure_pin' as output.")
         self.threads = []
+        self.addCleanup(self.cleanup)  # Register cleanup method
 
-    def tearDown(self):
-        # Ensure any ongoing toggling is stopped and all threads are joined
+    def cleanup(self):
         self.daq_device.stop_toggle()
         for thread in self.threads:
             if thread.is_alive():
                 thread.join()
-        print("TearDown complete: Stopped any ongoing toggling and joined all threads.")
+        print("Cleanup complete: Stopped any ongoing toggling and joined all threads.")
+
+    def tearDown(self):
+        # Run cleanup
+        self.cleanup()
 
         # Check if there were any failures or errors in the test result
-        result = self.defaultTestResult()  # Create a default test result object
-        self._feedErrorsToResult(result, self._outcome.errors)
+        result = self._outcome.result
         if any(error for (test, error) in result.errors) or any(failure for (test, failure) in result.failures):
             self.daq_device.write_digital('failure_pin', True)
             print("Failure detected: Toggling failure_pin ON")
