@@ -10,7 +10,10 @@ class TestMockDAQDevice(unittest.TestCase):
         self.daq_device = MockDAQDevice()
         self.daq_device.configure_digital_channel('pin1', 'input')
         self.daq_device.configure_digital_channel('pin2', 'output')
-        print("\nSetup complete: Configured 'pin1' as input and 'pin2' as output.")
+        self.daq_device.configure_digital_channel('failure_pin', 'output')  # New failure indicator pin
+        self.daq_device.write_digital('failure_pin', False)  # Ensure the failure pin starts from FALSE State
+        self.pin_statuses = []  # List to track pin statuses
+        print("\nSetup complete: Configured 'pin1' as input, 'pin2' as output, and 'failure_pin' as output.")
         self.threads = []
 
     def tearDown(self):
@@ -21,6 +24,43 @@ class TestMockDAQDevice(unittest.TestCase):
                 thread.join()
         print("TearDown complete: Stopped any ongoing toggling and joined all threads.")
 
+        # Check if there were any failures or errors in the test result
+        result = self.defaultTestResult()  # Create a default test result object
+        self._feedErrorsToResult(result, self._outcome.errors)
+        if any(error for (test, error) in result.errors) or any(failure for (test, failure) in result.failures):
+            self.daq_device.write_digital('failure_pin', True)
+            print("Failure detected: Toggling failure_pin ON")
+        # Append the latest pin statuses to the list
+        self.pin_statuses.append(self.get_pin_status())
+        # Print the latest pin status
+        self.print_latest_pin_status()
+
+    def get_pin_status(self):
+        """Get the current status of all pins."""
+        status = {}
+        for pin in ['pin1', 'pin2', 'failure_pin']:
+            status[pin] = self.daq_device.digital_pins[pin]['value']
+        return status
+
+    def print_pin_status(self):
+        """Print the latest pin statuses."""
+        print("Latest pin statuses:")
+        for status in self.pin_statuses:
+            for pin, value in status.items():
+                print(f"{pin}: {value}")
+        print("\n")
+
+    def print_latest_pin_status(self):
+        """Print the latest pin status explicitly."""
+        if self.pin_statuses:
+            latest_status = self.pin_statuses[-1]
+            print("Latest pin statuses after test:")
+            for pin, value in latest_status.items():
+                print(f"{pin}: {value}")
+            print("\n")
+        else:
+            print("No pin statuses recorded yet.\n")
+
     def test_initial_state(self):
         """Test initial state of the pins."""
         print("Testing initial state of the pins...")
@@ -30,6 +70,7 @@ class TestMockDAQDevice(unittest.TestCase):
         self.assertFalse(pin1_initial)
         self.assertFalse(pin2_initial)
         print("Initial state test passed.")
+        self.print_latest_pin_status()
 
     def test_write_digital(self):
         """Test writing to the output pin."""
@@ -39,6 +80,7 @@ class TestMockDAQDevice(unittest.TestCase):
         print(f"Pin2 value after write: {pin2_value}")
         self.assertTrue(pin2_value)
         print("Write operation test passed.")
+        self.print_latest_pin_status()
 
     def test_toggle_pins(self):
         """Test that pin1 toggles every second and pin2 is the opposite of pin1."""
@@ -70,6 +112,7 @@ class TestMockDAQDevice(unittest.TestCase):
         print("Toggle test passed. Stopping toggle process.")
         # Stop toggling
         self.daq_device.stop_toggle()
+        self.print_latest_pin_status()
 
     def test_timing_mechanism(self):
         """Validate the timing mechanism with a tolerance."""
@@ -85,11 +128,12 @@ class TestMockDAQDevice(unittest.TestCase):
         print(f"Elapsed time: {elapsed_time} seconds (expected ~2 seconds)")
 
         # Check that the elapsed time is close to the expected time (2 seconds) within tolerance
-        self.assertAlmostEqual(elapsed_time, 2.1, delta=0.10)  # Allow 50ms tolerance
+        self.assertAlmostEqual(elapsed_time, 2.0, delta=0.05)  # Allow 50ms tolerance
         print("Timing mechanism test passed.")
 
         # Stop toggling
         self.daq_device.stop_toggle()
+        self.print_latest_pin_status()
 
     def test_invalid_operations(self):
         """Test invalid write and read operations."""
@@ -99,12 +143,14 @@ class TestMockDAQDevice(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.daq_device.write_digital('pin1', True)
         print("Invalid write operation test passed.")
+        self.print_latest_pin_status()
         
         # Test invalid read operation on output pin
         print("Testing invalid read operation on output pin (pin2)...")
         with self.assertRaises(ValueError):
             self.daq_device.read_digital('pin2')
         print("Invalid read operation test passed.")
+        self.print_latest_pin_status()
 
     def test_external_signal_generator_pin1(self):
         """Simulate receiving signals from an external signal generator for pin1."""
@@ -133,6 +179,7 @@ class TestMockDAQDevice(unittest.TestCase):
         print(f"Final state of Pin1 after external signal simulation: {pin1_final}")
         external_signal_thread.join()
         print("External signal generator simulation test for pin1 passed.")
+        self.print_latest_pin_status()
 
     def test_external_signal_generator_pin2(self):
         """Simulate receiving signals from an external signal generator for pin2."""
@@ -161,6 +208,7 @@ class TestMockDAQDevice(unittest.TestCase):
         print(f"Final state of Pin2 after external signal simulation: {pin2_final}")
         external_signal_thread.join()
         print("External signal generator simulation test for pin2 passed.")
+        self.print_latest_pin_status()
 
 if __name__ == '__main__':
     unittest.main()

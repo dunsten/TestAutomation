@@ -12,9 +12,9 @@ class IntegrationSystem:
         self.database = Database(db_name)
         self.image_id = 0
 
-    def capture_and_analyze(self, with_defect=True, low_lighting=True):
+    def capture_and_analyze(self, with_defect=True, low_lighting=False):
         
-        # Randomize 'with defect', 'without defect', and 'low lighting' conditions
+        #Randomize 'with defect', 'without defect', and 'low lighting' conditions
         #with_defect = random.choice([True, False])
         #low_lighting = random.choice([True, False])
         

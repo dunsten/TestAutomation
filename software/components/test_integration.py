@@ -1,4 +1,3 @@
-# test_integration.py
 import unittest
 import os
 from ai import AISystemMock
@@ -10,18 +9,23 @@ from PIL import Image
 
 class TestIntegrationSystem(unittest.TestCase):
     def setUp(self):
+        # Set up the test environment
         self.db_name = "test_results.db"
         self.integration_system = IntegrationSystem(threshold=145, db_name=self.db_name)
 
     def tearDown(self):
-        # Ensure the database connection is closed before removing the file
+        # Tear down the test environment
+        # Close the database connection before removing the file
         self.integration_system.database.close()
+        # Remove the database file
         os.remove(self.db_name)
 
     def test_logging_results(self):
+        # Test logging results
+        print("\nTesting logging results...")
         # Capture and analyze with a defect and without a defect
-        self.integration_system.capture_and_analyze(with_defect=True)
-        self.integration_system.capture_and_analyze(with_defect=False)
+        self.integration_system.capture_and_analyze(with_defect=True, low_lighting=False)
+        self.integration_system.capture_and_analyze(with_defect=False, low_lighting=False)
         self.integration_system.capture_and_analyze(with_defect=True, low_lighting=True)
         self.integration_system.capture_and_analyze(with_defect=False, low_lighting=True)
 
@@ -32,20 +36,22 @@ class TestIntegrationSystem(unittest.TestCase):
         rows = cursor.fetchall()
         conn.close()
         
-         # Assertions to check the logging results
+        # Assertions to check the logging results
         self.assertEqual(len(rows), 4)
-        self.assertEqual(int.from_bytes(rows[0][2], "little"), 1)  # Defect present
-        self.assertEqual(int.from_bytes(rows[1][2], "little"), 0)  # No defect
-        self.assertEqual(int.from_bytes(rows[2][2], "little"), 1)  # Defect present with Low Lightning
-        self.assertEqual(int.from_bytes(rows[3][2], "little"), 0)  # No defect present with Low Lightning
+        self.assertEqual((rows[0][2]), 1)  # Defect present
+        self.assertEqual((rows[1][2]), 0)  # No defect
+        self.assertEqual((rows[2][2]), 1)  # Defect present with Low Lightning
+        self.assertEqual((rows[3][2]), 0)  # No defect present with Low Lightning
 
     def test_defect_detection(self):
+        # Test defect detection
+        print("\nTesting defect detection...")
         # Test with defect
-        image_with_defect = self.integration_system.camera.capture(with_defect=True)
+        image_with_defect = self.integration_system.camera.capture(with_defect=True, low_lighting=False)
         self.assertTrue(self.integration_system.ai_system.predict(image_with_defect))
         
         # Test without defect
-        image_without_defect = self.integration_system.camera.capture(with_defect=False)
+        image_without_defect = self.integration_system.camera.capture(with_defect=False, low_lighting=False)
         self.assertFalse(self.integration_system.ai_system.predict(image_without_defect))
         
         # Test with low lighting and defect
