@@ -81,6 +81,14 @@ class TestMockDAQDevice(unittest.TestCase):
         pin2_value = self.daq_device.digital_pins['pin2']['value']
         print(f"Pin2 value after write: {pin2_value}")
         self.assertTrue(pin2_value)
+
+        print("Testing write operation to Failure Pin (output pin)...")
+        self.daq_device.write_digital('failure_pin', True)
+        failure_pin_value = self.daq_device.digital_pins['failure_pin']['value']
+        print(f"Pin2 value after write: {failure_pin_value}")
+        self.assertTrue(failure_pin_value)
+        self.daq_device.write_digital('failure_pin', False)
+
         print("Write operation test passed.")
         self.print_latest_pin_status()
 

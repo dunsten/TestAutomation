@@ -35,11 +35,11 @@ class AISystemMock:
 
         # Remove the temporary image file
         cv2.imwrite(image_path, gauss_blur)
+        
         return image_path
         
         # Convert to grayscale
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        return image_path
 
     def detect_defect(self, image_path):
         """Detect the defect in the preprocessed image using Canny edge detection."""
@@ -50,9 +50,9 @@ class AISystemMock:
         edges = cv2.Canny(preprocessed_image, 30, 150)
 
         # Shows the Edges with 10x10 patch
-        """cv2.imshow("edges",edges)
+        cv2.imshow("edges",edges)
         cv2.waitKey(0)
-        cv2.destroyAllWindows()"""
+        cv2.destroyAllWindows()
 
         # Find contours in the edge-detected image
         contours, _ = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
