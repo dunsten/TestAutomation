@@ -1,7 +1,7 @@
 ## Hardware Project Documentation
 
 ## Overview:
-The Mock_DAQ project provides a simulated interface for interacting with a digital acquisition (DAQ) device. It includes functionality to configure digital channels, read and write digital values, simulate external signal generation, and test various operations.
+The Hardware project provides a simulated interface for interacting with a digital acquisition (DAQ) device. It includes functionality to configure digital channels, read and write digital values, simulate external signal generation, and test various operations.
 
 ## Project Structure:
 The project consists of the following files:
@@ -12,7 +12,7 @@ The project consists of the following files:
 ## Instructions
 
 # Installation
-1. Clone the Mock_DAQ repository from GitHub - https://github.com/dunsten/TestAutomation.git
+1. Clone the Hardware repository from GitHub - https://github.com/dunsten/TestAutomation.git
 2. Ensure Python 3.x is installed on your system.
 3. Install the necessary dependencies using `pip install -r requirements.txt`.
 
@@ -84,7 +84,7 @@ Sleep: Sleeps for a short duration (time.sleep(tolerance)) to avoid busy-waiting
 
 import time
 import threading
-from collections import defaultdict
+from collections import `defaultdict`
 
 It provides a default value for the key that does not exist. This means that if a key is not found in the dictionary, instead of a KeyError being thrown, a new key is created with the default value.
 
@@ -215,3 +215,6 @@ The pin statuses are not explicitly written before the test or while testing in 
 This test emulates the behavior of an external signal generator. This function toggles the value of pin1 and pin2 at regular intervals for a specified duration. The helper function called mock_external_signal_generator, is defined within the test method to emulate the behavior of an external signal generator by continuously toggling the value of a specified channel (pin1and pin2 in this case) at regular intervals (interval) for a specified duration (duration). A new thread (external_signal_thread) is created to execute the mock_external_signal_generator function.
 The target function for this thread is set to mock_external_signal_generator, and the arguments passed are the mock DAQ device instance (self.daq_device) and the channel (pin1 and pin2) to simulate external signals. The test waits for a specified duration (6 seconds) to observe multiple toggles of pin1 by the mock external signal generator. After the observation period, the test reads the final state of pin1 using the read_digital method of the mock DAQ device.
 It prints the final state of pin1 to the console to indicate whether the simulated external signal generation process affected the state of pin1 as expected.
+
+# Images:
+Added the Flowchart image in the directory `/hardware`
