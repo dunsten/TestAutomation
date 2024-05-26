@@ -1,15 +1,16 @@
 import time
 import nidaqmx
 from nidaqmx.constants import LineGrouping
+import keyboard
 
-def read_digital_input(pin_name, duration):
+def read_digital_input(pin_name):
     # Create a task to read digital input
     with nidaqmx.Task() as task:
         # Add the digital input channel
         task.di_channels.add_di_chan(pin_name, line_grouping=LineGrouping.CHAN_FOR_ALL_LINES)
         
-        start_time = time.time()
-        while time.time() - start_time < duration:
+        # Infinite loop for continuous pipreading
+        while True:
             # Record the start time of the read operation
             read_start_time = time.time()
             # Read the digital input
@@ -33,6 +34,11 @@ def read_digital_input(pin_name, duration):
 
             # Wait for a short duration before reading again
             time.sleep(0.1)
+
+            # Check for key press to exit the loop
+            if keyboard.is_pressed('q'):
+                break
+
 
 def write_digital_output(pin_name, value):
     # Create a task to write digital output
