@@ -18,12 +18,13 @@ The project consists of the following files:
 
 # Usage
 1. Import the `MockDAQDevice` class from the ‘Mock_Daq’ module.
-2. Create an instance of ‘MockDAQDevice’ to initialize the simulated DAQ device.
-3. Configure digital channels using the ‘configure_digital_channel()’ method.
-4. Read digital values using the ‘read_digital()’ method.
-5. Write digital values using the ‘write_digital()’ method.
-6. Simulate external signal generation using the ‘start_toggle()’ method.
-7. Run tests using the provided test cases in ‘Test_Mock_Daq.py’.
+2. Create an instance of `MockDAQDevice` to initialize the simulated DAQ device.
+3. Configure digital channels using the `configure_digital_channel()` method.
+4. Read digital values using the `read_digital()` method.
+5. Write digital values using the `write_digital()` method.
+6. Simulate external signal generation using the `start_toggle()` method.
+7. Run tests using the provided test cases in `Test_Mock_Daq.py`.
+8. The `NIDAQMX.py` is just for a demonstration to show how in theory we would read and write to the pins from its library, if connected to a true hardware.
 
 Class: MockDAQDevice
 ## Methods
@@ -195,7 +196,7 @@ This test ensures that the timing mechanism of the toggle operation functions co
 
 The test_invalid_operations method tests for invalid write and read operations on the MockDAQDevice object. Specifically, it verifies that attempting to write to an input pin (pin1) and attempting to read from an output pin (pin2) raises a ValueError, as these operations are not allowed according to the configuration of the MockDAQDevice.
 
-Here's how the test works:
+Here`s how the test works:
 
 Invalid Write Operation Test:
 The test attempts to write a value of True to the input pin - pin1 using self.daq_device.write_digital(`pin1`, True).
