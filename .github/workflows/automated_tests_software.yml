@@ -26,11 +26,11 @@ jobs:
     - name: Log in to Docker Hub
       run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
-    - name: Build Docker Image
-      run: docker build . -t ${{ secrets.DOCKER_USERNAME }}/my-image:latest
+    - name: Build Docker Image for Software Tests
+      run: docker build -f Dockerfile.software . -t ${{ secrets.DOCKER_USERNAME }}/software-image:latest
 
-    - name: Push Docker Image
-      run: docker push ${{ secrets.DOCKER_USERNAME }}/my-image:latest
+    - name: Push Docker Image for Software Tests
+      run: docker push ${{ secrets.DOCKER_USERNAME }}/software-image:latest
 
-    - name: Run Tests Inside Docker
-      run: docker run ${{ secrets.DOCKER_USERNAME }}/my-image:latest
+    - name: Run Software Tests Inside Docker
+      run: docker run ${{ secrets.DOCKER_USERNAME }}/software-image:latest
