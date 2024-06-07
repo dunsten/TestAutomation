@@ -33,6 +33,8 @@ def main():
         pin1_values.append(pin1_value)
         pin2_values.append(pin2_value)
 
+        print(f"Time: {current_time:.2f}s, pin1: {pin1_value}, pin2: {pin2_value}")
+
         ax.clear()
         ax.plot(times, pin1_values, label='pin1')
         ax.plot(times, pin2_values, label='pin2', linestyle='--')

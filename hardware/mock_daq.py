@@ -7,7 +7,7 @@ class MockDAQDevice:
         # Dictionary to store the state of each channel
         self.digital_pins = defaultdict(lambda: {'direction': None, 'value': False})
         self._stop_toggle = threading.Event()
-        self._toggle_thread = None
+        self._toggle_thread = None #Using this as a Place Holder
 
     def configure_digital_channel(self, channel, direction):
         """
@@ -87,6 +87,7 @@ class MockDAQDevice:
                 new_value = not current_value
                 self.digital_pins[input_channel]['value'] = new_value
                 self.digital_pins[output_channel]['value'] = not new_value
+                print(f"Toggling: {input_channel} = {new_value}, {output_channel} = {not new_value}")
                 next_toggle_time += interval
             time.sleep(tolerance)  # Check in small intervals for more accurate toggling
 

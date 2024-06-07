@@ -50,9 +50,9 @@ class AISystemMock:
         edges = cv2.Canny(preprocessed_image, 30, 150)
 
         # Shows the Edges with 10x10 patch
-        """cv2.imshow("edges",edges)
+        cv2.imshow("edges",edges)
         cv2.waitKey(0)
-        cv2.destroyAllWindows()"""
+        cv2.destroyAllWindows()
 
         # Find contours in the edge-detected image
         contours, _ = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)

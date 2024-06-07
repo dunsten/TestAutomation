@@ -57,7 +57,7 @@ if __name__ == "__main__":
     duration = 10
 
     # Call the function to read the digital input pin
-    read_digital_input(pin_name, duration)
+    read_digital_input(pin_name)
 
     # Specify the digital output pin name for failure pin
     failure_pin_name = "Dev1/port1"  # Change this to the appropriate failure pin name
