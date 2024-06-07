@@ -35,7 +35,7 @@ jobs:
         context: .
         file: Dockerfile.hardware
         push: true
-        tags: ${{ secrets.DOCKER_USERNAME }}/hardware-image:latest
+        tags: ${{ secrets.DOCKER_USERNAME }}/test_automation_overview_ai
 
     - name: Run Hardware Tests Inside Docker
-      run: docker run ${{ secrets.DOCKER_USERNAME }}/hardware-image:latest
+      run: docker run ${{ secrets.DOCKER_USERNAME }}/test_automation_overview_ai

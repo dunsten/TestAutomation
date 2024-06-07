@@ -35,7 +35,7 @@ jobs:
         context: .
         file: Dockerfile.software
         push: true
-        tags: ${{ secrets.DOCKER_USERNAME }}/software-image:latest
+        tags: ${{ secrets.DOCKER_USERNAME }}/test_automation_overview_ai
 
     - name: Run Software Tests Inside Docker
-      run: docker run ${{ secrets.DOCKER_USERNAME }}/software-image:latest
+      run: docker run ${{ secrets.DOCKER_USERNAME }}/test_automation_overview_ai
