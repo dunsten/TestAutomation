@@ -1,20 +1,20 @@
-# Use a base image with the necessary dependencies
-FROM python:3.9-slim
+# Use the official Python image from the Docker Hub
+FROM python:3.9
 
-# Set the working directory inside the container
+# Set the working directory in the container
 WORKDIR /app
 
-# Copy the requirements file to the working directory
-COPY requirements.txt .
+# Copy the requirements file into the container at /app
+COPY requirements.txt /app/
 
-# Install the required dependencies
-RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
+# Install any needed packages specified in requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the application code to the working directory
-COPY . .
+# Copy the rest of the application code to /app
+COPY . /app
 
-# Expose the port on which the app will run
-EXPOSE 8000
+# Set environment variable to ensure Python uses the right directory
+ENV PYTHONPATH=/app
 
-# Define the command to run the app
-CMD ["python", "-m", "app"]
+# Run the test script when the container launches
+CMD ["python", "hardware/test_mock_daq.py"]
