@@ -21,10 +21,13 @@ class AISystemMock:
         image.save(image_path)
 
         # Read the image using OpenCV
-        img = cv2.imread(image_path,1)
+        img = cv2.imread(image_path,1) # Image has to be Read in Color hence Mode=1
 
         # Creating a Kernel mask
-        kernel = np.ones((3,3),np.float32)/9
+        """A 3x3 matrix of ones, divided by 9, creating an averaging filter. 
+        This is known as a normalized box filter. This process involves convolution, where the kernel is slid over the image, 
+        and the pixel values are averaged, effectively smoothing the image"""
+        kernel = np.ones((3,3),np.float32)/9 
         filt_2d = cv2.filter2D(img, -1, kernel)
         blur = cv2.blur(img, (3,3))
 
@@ -50,19 +53,25 @@ class AISystemMock:
         edges = cv2.Canny(preprocessed_image, 30, 150)
 
         # Shows the Edges with 10x10 patch
-        """cv2.imshow("edges",edges)
+        cv2.imshow("edges",edges)
         cv2.waitKey(0)
-        cv2.destroyAllWindows()"""
+        cv2.destroyAllWindows()
 
         # Find contours in the edge-detected image
         contours, _ = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        print(f"Total contours found: {len(contours)}")
 
         # Iterate through the contours to find a 10x10 patch
-        for contour in contours:
+        """for contour in contours:
+            x, y, w, h = cv2.boundingRect(contour)"""
+
+        for i, contour in enumerate(contours):
             x, y, w, h = cv2.boundingRect(contour)
+            print(f"Contour {i}: x={x}, y={y}, width={w}, height={h}")
             if 8 <= w <= 12 and 8 <= h <= 12 and abs(w - h) <= 2:
+                print(f"Defect found in contour {i} at position ({x},{y}) with width {w} and height {h}")
                 return True
-        
+        print("No defect found")
         return False
     
     def predict(self, image):

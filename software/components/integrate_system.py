@@ -27,7 +27,7 @@ class IntegrationSystem:
         # Log the result in the database
         self.database.log_result(self.image_id, defect_present)
 
-        print(f"Image ID {self.image_id}: Defect present: {defect_present}")
+        print(f"Image ID {self.image_id}: Defect present: {defect_present}\n")
         self.image_id += 1
 
     def run(self, capture_interval=1, capture_count=10):
