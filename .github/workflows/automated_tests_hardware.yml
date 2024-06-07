@@ -26,16 +26,6 @@ jobs:
     - name: Push Docker Image
       run: docker push ${{ secrets.DOCKER_USERNAME }}/my-image:latest
 
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.x'
-
-    - name: Install Dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-
     - name: Run Tests Inside Docker
       run: |
-        docker run ${{ secrets.DOCKER_USERNAME }}/my-image:latest python hardware/test_mock_daq.py
+        docker run ${{ secrets.DOCKER_USERNAME }}/my-image:latest
