@@ -1,4 +1,4 @@
-name: Automated Tests Hardware
+name: Automated Tests Software
 
 on:
   push:
